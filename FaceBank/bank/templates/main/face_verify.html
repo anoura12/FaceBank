@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+    {% block content %}
+    {% load static %}
+    <head>
+        <title>VisionApp</title>
+        <meta charset='utf-8'>
+        <link rel="stylesheet" href="{% static 'css/camera.css' %}" type="text/css" media="all">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type="module" src="{% static 'js/camera.js' %}"></script>
+    </head>
+    <body>
+        <div class="contentarea">
+            <div class="Input">
+                <form method="POST" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    <div id="camera" class="camera">
+                        <video id="video">Video stream not available.</video>
+                        <button id="startbutton" type="button">Take photo</button>
+                        <input id="webimg" value="{{ form.face }}" name="src" type="text" style="display: none;">
+                        <canvas id="canvas">
+                        </canvas>
+                    </div>
+                    <br>
+                    <div>
+                        <img id="photo" alt="your image">
+                    </div>
+                </div>
+                <img src="{{ path }}" alt="The screen capture will appear in this box.">
+             </div>
+                    <br>
+                    <button type="submit" class="button" id="submit">Submit</button>
+                </form>
+    </body>
+    {% endblock %}
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <html>
+
+<head>
+<title>Face Capture</title>
+    
+</head>
+
+<body>
+
+
+    <button id="start-camera">Start Camera</button>
+    <video id="video" width="320" height="240" autoplay></video>
+    <button id="click-photo">Click Photo</button>
+    <canvas id="canvas" width="320" height="240"></canvas>
+
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <input type="text" value="{{ form.username }}">
+    <input id="photo" value="{{ form.face }}">
+
+
+    <button type="submit">Select</button>
+
+    </form>
+
+    <script>
+        let camera_button = document.querySelector("#start-camera");
+        let video = document.querySelector("#video");
+        let click_button = document.querySelector("#click-photo");
+        let canvas = document.querySelector("#canvas");
+        let photo = document.querySelector('#photo');
+
+        camera_button.addEventListener('click', async function () {
+            let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+            video.srcObject = stream;
+        });
+
+        click_button.addEventListener('click', function () {
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            let image_data_url = canvas.toDataURL('image/jpeg');
+            photo = image_data_url;
+
+            // data url of the image
+            console.log(canvas);
+        });
+    </script>
+
+
+</body>
+
+</html> -->
