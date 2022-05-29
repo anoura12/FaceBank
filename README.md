@@ -19,8 +19,8 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![MIT License][license-shield]][https://github.com/anoura12/FaceBank/blob/main/LICENSE]
-[![LinkedIn][linkedin-shield]][https://www.linkedin.com/in/anoushka-ramesh-2a3847210/]
+[![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 
@@ -28,7 +28,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/anoura12/FaceBank">
-    <img src="FaceBank/bank/static/Screenshot from 2022-05-29 22-09-12.png" alt="Logo" width="250" height="80">
+    <img src="FaceBank/bank/static/Screenshot from 2022-05-29 22-09-12.png" alt="Logo" width="300" height="80">
   </a>
 
 <h3 align="center">FaceBank</h3>
@@ -71,10 +71,7 @@
 
 ![Screenshot from 2022-05-29 22-44-08](https://user-images.githubusercontent.com/73518403/170882930-9efb02dd-7c04-4a39-85c9-6f74a710b008.png)
 
-
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
-
-
+This project was created in accordance with the Microsoft Engage 2022 program. One of the challenges was to implement facial recognition through a web application displaying a particular usecase. FaceBank uses facial recognition to make bank transactions so that transactions are more safe and secure.
 
 ### Built With
 
@@ -154,7 +151,7 @@ Project Link: [https://github.com/anoura12/FaceBank](https://github.com/anoura12
 [issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
 [issues-url]: https://github.com/othneildrew/Best-README-Template/issues
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
+[license-url]: https://github.com/anoura12/FaceBank/blob/main/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
+[linkedin-url]: https://www.linkedin.com/in/anoushka-ramesh-2a3847210/
 [product-screenshot]: images/screenshot.png
