@@ -57,7 +57,6 @@
       }, false);
   
       startbutton.addEventListener('click', function(ev){
-        console.log('hi');
         takepicture();
         
       }, false);
@@ -75,7 +74,6 @@
   
       var data = canvas.toDataURL('image/png');
       webimg.setAttribute('value', data);
-      photo.setAttribute('src', data);
       
     }
     
@@ -94,11 +92,7 @@
         context.drawImage(video, 0, 0, width, height);
       
         var data = canvas.toDataURL('image/png');
-        var test = 'hi';
-        console.log(test);
-        console.log(data);
-        webimg.setAttribute('value', data);
-        photo.setAttribute('src', data);
+        webimg.setAttribute('value', data); //captures a base 64 data url and sets the value attribute of the input tag to this url
         
       } else {
         clearphoto();
