@@ -1,71 +1,57 @@
 from django.shortcuts import render,redirect
-import requests
-import random
-from django.http import HttpResponse
-from django.views.decorators import gzip
-import threading
 from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
 from django.conf import settings
-# Create your views here.
-from bank.models import Face, MoneyTransfer, UserAccount
-import sys
-from urllib.request import urlopen
 
+from bank.models import Face, MoneyTransfer, UserAccount
 from bank.forms import MoneyTransferForm
 
-from django.core.files import File
 from django.core.files.base import ContentFile
-from django.core.files.temp import NamedTemporaryFile
 import base64
 
-import asyncio
-from email.mime import image
-import io
-import glob
 import os
-import sys
-import time
-from tkinter import Frame
-import uuid
 import requests
+import random
 
 from azure.cognitiveservices.vision.face import FaceClient
 from msrest.authentication import CognitiveServicesCredentials
-from azure.cognitiveservices.vision.face.models import TrainingStatusType, Person, QualityForRecognition
-from django.contrib.auth import authenticate, login, logout
 from dotenv import load_dotenv
 
 # ======================================================================
 
-load_dotenv()
-# This key will serve all examples in this document.
-KEY = os.getenv('KEY')
+load_dotenv() # to load environment variables
 
-# This endpoint will be used in all examples in this quickstart.
-ENDPOINT = os.getenv('ENDPOINT')
+KEY = os.getenv('KEY') # This key will serve all examples in this document.
+
+ENDPOINT = os.getenv('ENDPOINT')  # This endpoint will be used in all examples in this quickstart.
 
 face_client = FaceClient(ENDPOINT, CognitiveServicesCredentials(KEY))
 
 def index(request):
+    '''
+    Landing Page for app
+    '''
+
     return render(request, 'main/index.html')
     
 
 def face_capture(request):
+    '''
+    To register the face in the database
+    '''
     context = dict()
     username = None
     if request.method == 'POST':
         username = request.user.username
-        image_path = request.POST["src"]# src is the name of input attribute in your html file, this src value is set in javascript code
+        image_path = request.POST["src"]# src is the name of input attribute in html file, this src value is set in javascript code
         format, imgstr = image_path.split(';base64,') 
         ext = format.split('/')[-1] 
 
         image = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
         
         if image is not None:
-            obj = Face.objects.create(username=username, face=image)  # create a object of Image type defined in your model
+            obj = Face.objects.create(username=username, face=image)  # create a object of Face type defined in your model
             obj.save()
-            context["path"] = obj.face.url  #url to image stored in my server/local device
+            context["path"] = obj.face.url  # url to image stored in my server/local device
             context["username"] = obj.username
         else :
             return redirect('/')
@@ -73,10 +59,15 @@ def face_capture(request):
     return render(request, 'main/face_capture.html', context=context)
 
 def randomGen():
-    # returns a 6 digit random number
+    '''
+    returns a 6 digit random number
+    '''
     return int(random.uniform(100000, 999999))
 
 def create_bank_account(request):
+    '''
+    creates a bank account for user using the randomly generated 5 digit number
+    '''
     try:
         curr_user = UserAccount.objects.get(user_name=request.user) # getting details of current user
     except:
@@ -89,13 +80,14 @@ def create_bank_account(request):
     return render(request, "main/profile.html", {"curr_user": curr_user})
     
 def money_transfer(request):
+     '''
+     transacts money from source account number to destination account number
+     '''
      if request.method == "POST":
         form = MoneyTransferForm(request.POST)
         if form.is_valid():
             form.save()
 
-            print(request.user)
-            print(request.user.username)
             curr_user = MoneyTransfer.objects.get(user_name=request.user.username)
             dest_user_acc_num = curr_user.destination_account_number
 
@@ -120,52 +112,49 @@ def money_transfer(request):
         return render(request, "main/money_transfer.html", {"form": form})
 
 def face_verify(request):
-    context = dict()
+    '''
+    verifies the face captured against the registered face in the database using Azure Face API
+    '''
     if request.method == 'POST':
-        image_path = request.POST["src"]# src is the name of input attribute in your html file, this src value is set in javascript code
+        image_path = request.POST["src"] # src is the name of input attribute in html file, this src value is set in javascript code
         format, imgstr = image_path.split(';base64,') 
         ext = format.split('/')[-1] 
 
-        imageFile = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+        imageFile = ContentFile(base64.b64decode(imgstr), name='temp.' + ext) # converts the base 64 url into a file that is the destination img
 
         path = default_storage.save('tmp/somename.png', imageFile)
-        tmp_file = os.path.join(settings.MEDIA_ROOT, path)
-        print(imageFile)
-        print(tmp_file)
+        tmp_file = os.path.join(settings.MEDIA_ROOT, path) # saves the destination img as a temp file which will be deleted later
 
         faces = Face.objects.all()
         f = ''
         for face in faces:
             if request.user.username == face.username:
-                f = face.face
-                print(f)
+                f = face.face #extracts each face
+
         face_src_image = 'media/' + str(f)
 
-        response_detected_faces = face_client.face.detect_with_stream(
+        response_detected_faces = face_client.face.detect_with_stream( #detects face in destination img
         image=open(tmp_file, 'rb'),
         detection_model='detection_03',
         recognition_model='recognition_04',  
         )
         face_ids = [face.face_id for face in response_detected_faces]
-        # print(face_ids)
 
         img_source = open(face_src_image, 'rb')
-        response_face_source = face_client.face.detect_with_stream(
+        response_face_source = face_client.face.detect_with_stream( # detects face in source img (img in database)
             image=img_source,
             detection_model='detection_03',
             recognition_model='recognition_04'    
         )
         face_id_source = response_face_source[0].face_id
-        # print(face_id_source)
 
-        matched_faces = face_client.face.find_similar(
+        matched_faces = face_client.face.find_similar( # checks whether face_source and face_dest have same face ids
             face_id=face_id_source,
             face_ids=face_ids
         )
 
-        print(matched_faces)
 
-        if len(matched_faces) == 0:
+        if len(matched_faces) == 0: # case where faces do not match
             print('Face not matched')
             default_storage.delete(tmp_file)
             return render(request, 'main/404.html')
@@ -174,7 +163,7 @@ def face_verify(request):
 
         for matched_face in matched_faces:
             for face in response_detected_faces:
-                if face.face_id == matched_face.face_id:
+                if face.face_id == matched_face.face_id: # case where face matches
                     print('Face Matched!')
                     default_storage.delete(tmp_file)
                     return redirect('main:money_transfer')
@@ -184,9 +173,15 @@ def face_verify(request):
     
 
 def dashboard(request):
+    '''
+    Dashboard of the app
+    '''
     return render(request, 'main/dashboard.html')
 
 def bank_account_details(request):
+    '''
+    Allows user to view their bank account details
+    '''
     curr_user = UserAccount.objects.get(user_name=request.user) 
     return render(request, 'main/bank_account_details.html',{"curr_user": curr_user})
 

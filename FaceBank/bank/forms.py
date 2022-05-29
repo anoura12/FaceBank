@@ -1,5 +1,3 @@
-from django.db import models  
-from django.forms import fields  
 from .models import Face, MoneyTransfer
 from django.forms import ModelForm  
 from django import forms
@@ -11,13 +9,13 @@ class UserImageForm(ModelForm):
         model = Face  
         fields = '__all__'  
 
-class MoneyTransferForm (ModelForm):
+class MoneyTransferForm (ModelForm): #form for capturing transaction details
     class Meta:
         model = MoneyTransfer
         fields = '__all__'
 
 
-class UserLoginForm(AuthenticationForm):
+class UserLoginForm(AuthenticationForm): #form for capturing login details
     def __init__(self, *args, **kwargs):
         super(UserLoginForm, self).__init__(*args, **kwargs)
 
