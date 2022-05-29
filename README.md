@@ -31,8 +31,7 @@
     <img src="FaceBank/bank/static/Screenshot from 2022-05-29 22-09-12.png" alt="Logo" width="120" height="80">
   </a>
 
-<h3 align="center">FaceBank</h3>![Screenshot from 2022-05-29 22-44-08](https://user-images.githubusercontent.com/73518403/170882930-9efb02dd-7c04-4a39-85c9-6f74a710b008.png)
-
+<h3 align="center">FaceBank</h3>
 
   <p align="center">
     A web application that uses facial recognition to make bank transactions.
@@ -78,7 +77,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+![Screenshot from 2022-05-29 22-44-08](https://user-images.githubusercontent.com/73518403/170882930-9efb02dd-7c04-4a39-85c9-6f74a710b008.png)
+
 
 Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
 
