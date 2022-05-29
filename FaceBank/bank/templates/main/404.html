@@ -1,11 +1,10 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FaceBank Dashboard</title>
+    <title>404 - FaceBank Dashboard</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
@@ -16,24 +15,11 @@
       defer
     ></script>
     <script src="{% static "js/init-alpine.js" %}"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css"
-    />
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"
-      defer
-    ></script>
-    <script src="{% static "js/charts-lines.js" %}" defer></script>
-    <script src="{% static "js/charts-pie.js" %}" defer></script>
   </head>
   <body>
-
-  {% block content %}
-  {% if user.is_authenticated %}
-  <div
+    <div
       class="flex h-screen bg-gray-50 dark:bg-gray-900"
-      :class="{ 'overflow-hidden': isSideMenuOpen }"
+      :class="{ 'overflow-hidden': isSideMenuOpen}"
     >
       <!-- Desktop sidebar -->
       <aside
@@ -48,13 +34,17 @@
           </a>
           <ul class="mt-6">
             <li class="relative px-6 py-3">
-              <span
+              <!-- Active items have the snippet below -->
+              <!-- <span
                 class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
                 aria-hidden="true"
-              ></span>
+              ></span> -->
+
+              <!-- Add this classes to an active anchor (a tag) -->
+              <!-- text-gray-800 dark:text-gray-100 -->
               <a
-                class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
-                href="dashboard.html"
+                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                href="../index.html"
               >
                 <svg
                   class="w-5 h-5"
@@ -74,47 +64,6 @@
               </a>
             </li>
           </ul>
-              </template>
-            </li>
-          </ul>
-          <div class="px-6 my-6">
-            <a href="{% url 'main:create_bank_account' %}">
-            <button
-              class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-            >
-              Create new account
-              <span class="ml-2" aria-hidden="true">+</span>
-            </button>
-          </a>
-          </div>
-          <div class="px-6 my-6">
-            <a href="{% url 'main:face_capture' %}">
-            <button
-              class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-            >
-              Register Face
-            </button>
-          </a>
-          </div>
-          <div class="px-6 my-6">
-            <a href="{% url 'main:face_verify' %}">
-            <button
-              class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-            >
-                  Make transaction
-            </button>
-          </a>
-          </div>
-          <div class="px-6 my-6">
-            <a href="{% url 'main:bank_account_details' %}">
-            <button
-              class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-            >
-              View Bank Account Status
-            </button>
-          </a>
-          </div>
-          
         </div>
       </aside>
       <!-- Mobile sidebar -->
@@ -129,71 +78,14 @@
         x-transition:leave-end="opacity-0"
         class="fixed inset-0 z-10 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center"
       ></div>
-      <aside
-        class="fixed inset-y-0 z-20 flex-shrink-0 w-64 mt-16 overflow-y-auto bg-white dark:bg-gray-800 md:hidden"
-        x-show="isSideMenuOpen"
-        x-transition:enter="transition ease-in-out duration-150"
-        x-transition:enter-start="opacity-0 transform -translate-x-20"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in-out duration-150"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0 transform -translate-x-20"
-        @click.away="closeSideMenu"
-        @keydown.escape="closeSideMenu"
-      >
-        <div class="py-4 text-gray-500 dark:text-gray-400">
-          <a
-            class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200"
-            href="#"
-          >
-            FaceBank
-          </a>
-          <ul class="mt-6">
-            <li class="relative px-6 py-3">
-              <span
-                class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
-                aria-hidden="true"
-              ></span>
-              <a
-                class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
-                href="dashboard.html"
-              >
-                <svg
-                  class="w-5 h-5"
-                  aria-hidden="true"
-                  fill="none"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                  ></path>
-                </svg>
-                <span class="ml-4">Dashboard</span>
-              </a>
-            </li>
-          </ul>
-            <div class="px-6 my-6">
-            <button
-              class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-            >
-              Create new account
-              <span class="ml-2" aria-hidden="true">+</span>
-            </button>
-          </div>
-        </div>
-      </aside>
-      <div class="flex flex-col flex-1 w-full">
+      <div class="flex flex-col flex-1">
         <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
           <div
             class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300"
           >
             <!-- Mobile hamburger -->
             <button
-              class="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
+              class="p-1 -ml-1 mr-5 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
               @click="toggleSideMenu"
               aria-label="Menu"
             >
@@ -232,12 +124,12 @@
                 <input
                   class="w-full pl-8 pr-2 text-sm text-gray-700 placeholder-gray-600 bg-gray-100 border-0 rounded-md dark:placeholder-gray-500 dark:focus:shadow-outline-gray dark:focus:placeholder-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:placeholder-gray-500 focus:bg-white focus:border-purple-300 focus:outline-none focus:shadow-outline-purple form-input"
                   type="text"
-                  placeholder="Search"
+                  placeholder="Search for projects"
                   aria-label="Search"
                 />
               </div>
             </div>
-            <ul class="flex justify-right items-right flex-shrink-0 space-x-6">
+            <ul class="flex items-center flex-shrink-0 space-x-6">
               <!-- Theme toggler -->
               <li class="flex">
                 <button
@@ -306,6 +198,7 @@
                     @click.away="closeNotificationsMenu"
                     @keydown.escape="closeNotificationsMenu"
                     class="absolute right-0 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md dark:text-gray-300 dark:border-gray-700 dark:bg-gray-700"
+                    aria-label="submenu"
                   >
                     <li class="flex">
                       <a
@@ -418,7 +311,7 @@
                     <li class="flex">
                       <a
                         class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                        href="{% url 'logout' %}"
+                        href="#"
                       >
                         <svg
                           class="w-4 h-4 mr-3"
@@ -443,32 +336,35 @@
             </ul>
           </div>
         </header>
-        <main class="h-full overflow-y-auto">
-          <div class="container px-6 mx-auto grid">
-            <h2
-              class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
+        <main class="h-full pb-16 overflow-y-auto">
+          <div class="container flex flex-col items-center px-6 mx-auto">
+            <svg
+              class="w-12 h-12 mt-8 text-purple-200"
+              fill="currentColor"
+              viewBox="0 0 20 20"
             >
-              Dashboard
-            </h2>
-            <div class="container flex flex-col items-center px-6 mx-auto">
-              <h1 class="text-6xl font-semibold text-gray-700 dark:text-gray-200">
-                Welcome to FaceBank!
-              </h1>
-              <p class="text-gray-700 dark:text-gray-300">
-                Click on any one of the buttons on the sidebar to get started.
-              </p>
-            </div>
-              
-                </div>
-              </div>
-            </div>
+              <path
+                fill-rule="evenodd"
+                d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+            <h1 class="text-6xl font-semibold text-gray-700 dark:text-gray-200">
+              Face Not Verified.
+            </h1>
+            <p class="text-gray-700 dark:text-gray-300">
+              Unfortunately your face did not match the one that has been registered in the database. Login to another account or
+              <a
+                class="text-purple-600 hover:underline dark:text-purple-300"
+                href="/"
+              >
+                go back
+              </a>
+              .
+            </p>
           </div>
         </main>
       </div>
     </div>
-    {% else %}
-    <meta http-equiv="REFRESH" content="0;url={% url 'login' %}">
-  {% endif %}
-  {% endblock %}    
   </body>
 </html>
