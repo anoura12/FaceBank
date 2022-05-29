@@ -19,8 +19,8 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
+[![MIT License][license-shield]][https://github.com/anoura12/FaceBank/blob/main/LICENSE]
+[![LinkedIn][linkedin-shield]][https://www.linkedin.com/in/anoushka-ramesh-2a3847210/]
 
 
 
@@ -28,7 +28,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/anoura12/FaceBank">
-    <img src="FaceBank/bank/static/Screenshot from 2022-05-29 22-09-12.png" alt="Logo" width="200" height="80">
+    <img src="FaceBank/bank/static/Screenshot from 2022-05-29 22-09-12.png" alt="Logo" width="250" height="80">
   </a>
 
 <h3 align="center">FaceBank</h3>
