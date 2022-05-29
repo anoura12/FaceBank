@@ -12,6 +12,7 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('money_transfer/', views.money_transfer, name='money_transfer'),
     path('face_verify/', views.face_verify, name='face_verify'),
+    path('create_bank_account/', views.create_bank_account, name='create_bank_account'),
     
 ]
  

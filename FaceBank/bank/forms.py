@@ -1,12 +1,15 @@
 from django.db import models  
 from django.forms import fields  
-from .models import Face
+from .models import Face, MoneyTransfer
 from django.forms import ModelForm  
   
   
 class UserImageForm(ModelForm):  
     class Meta:  
-        # To specify the model to be used to create form  
-        model = Face 
-        # It includes all the fields of model  
+        model = Face  
         fields = '__all__'  
+
+class MoneyTransferForm (ModelForm):
+    class Meta:
+        model = MoneyTransfer
+        fields = '__all__'
