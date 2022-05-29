@@ -28,7 +28,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/anoura12/FaceBank">
-    <img src="FaceBank/bank/static/Screenshot from 2022-05-29 22-09-12.png" alt="Logo" width="120" height="80">
+    <img src="FaceBank/bank/static/Screenshot from 2022-05-29 22-09-12.png" alt="Logo" width="200" height="80">
   </a>
 
 <h3 align="center">FaceBank</h3>
@@ -36,15 +36,7 @@
   <p align="center">
     A web application that uses facial recognition to make bank transactions.
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
-  </p>
+    
 </div>
 
 
