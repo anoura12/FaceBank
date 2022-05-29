@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 import requests
 import random
-from django.http import HttpResponseServerError,StreamingHttpResponse
+from django.http import HttpResponse
 from django.views.decorators import gzip
 import threading
 from django.core.files.storage import default_storage
@@ -29,33 +29,33 @@ import time
 from tkinter import Frame
 import uuid
 import requests
-from urllib.parse import urlparse
-from io import BytesIO
-# To install this module, run:
-# python -m pip install Pillow
-from PIL import Image, ImageDraw
+
 from azure.cognitiveservices.vision.face import FaceClient
 from msrest.authentication import CognitiveServicesCredentials
 from azure.cognitiveservices.vision.face.models import TrainingStatusType, Person, QualityForRecognition
-
+from django.contrib.auth import authenticate, login, logout
+from dotenv import load_dotenv
 
 # ======================================================================
 
-
+load_dotenv()
 # This key will serve all examples in this document.
-KEY = 'bb38949700fc42ada84a3ef4e4610e69'
+KEY = os.getenv('KEY')
 
 # This endpoint will be used in all examples in this quickstart.
-ENDPOINT = 'https://anoushkafaceapi.cognitiveservices.azure.com/'
+ENDPOINT = os.getenv('ENDPOINT')
+
+face_client = FaceClient(ENDPOINT, CognitiveServicesCredentials(KEY))
 
 def index(request):
     return render(request, 'main/index.html')
+    
 
 def face_capture(request):
     context = dict()
-    print(request.POST)
+    username = None
     if request.method == 'POST':
-        username = 'anoushka'
+        username = request.user.username
         image_path = request.POST["src"]# src is the name of input attribute in your html file, this src value is set in javascript code
         format, imgstr = image_path.split(';base64,') 
         ext = format.split('/')[-1] 
@@ -69,7 +69,7 @@ def face_capture(request):
             context["username"] = obj.username
         else :
             return redirect('/')
-        return redirect('/')
+        return redirect('main:dashboard')
     return render(request, 'main/face_capture.html', context=context)
 
 def randomGen():
@@ -93,15 +93,17 @@ def money_transfer(request):
         form = MoneyTransferForm(request.POST)
         if form.is_valid():
             form.save()
-        
-            curr_user = MoneyTransfer.objects.get(enter_your_user_name=request.user)
-            dest_user_acc_num = curr_user.enter_the_destination_account_number
+
+            print(request.user)
+            print(request.user.username)
+            curr_user = MoneyTransfer.objects.get(user_name=request.user.username)
+            dest_user_acc_num = curr_user.destination_account_number
 
             temp = curr_user # Delete this instance once money transfer is done
             
             dest_user = UserAccount.objects.get(account_number=dest_user_acc_num) # FIELD 1
-            transfer_amount = curr_user.enter_the_amount_to_be_transferred_in_INR # FIELD 2
-            curr_user = UserAccount.objects.get(user_name=request.user) # FIELD 3
+            transfer_amount = curr_user.transferred_amount # FIELD 2
+            curr_user = UserAccount.objects.get(user_name=request.user.username) # FIELD 3
 
             # Now transfer the money!
             curr_user.balance = curr_user.balance - transfer_amount
@@ -112,7 +114,7 @@ def money_transfer(request):
             dest_user.save()
 
             temp.delete() 
-            return redirect("main/profile.html")
+            return render(request, "main/bank_account_details.html", {"curr_user": curr_user})
      else:
         form = MoneyTransferForm()
         return render(request, "main/money_transfer.html", {"form": form})
@@ -131,9 +133,13 @@ def face_verify(request):
         print(imageFile)
         print(tmp_file)
 
-        face = Face.objects.all().values('face')
-        print(face[0]['face'])
-        face_src_image = 'media/' + face[0]['face']
+        faces = Face.objects.all()
+        f = ''
+        for face in faces:
+            if request.user.username == face.username:
+                f = face.face
+                print(f)
+        face_src_image = 'media/' + str(f)
 
         response_detected_faces = face_client.face.detect_with_stream(
         image=open(tmp_file, 'rb'),
@@ -161,16 +167,17 @@ def face_verify(request):
 
         if len(matched_faces) == 0:
             print('Face not matched')
+            default_storage.delete(tmp_file)
+            return render(request, 'main/404.html')
+
 
 
         for matched_face in matched_faces:
             for face in response_detected_faces:
                 if face.face_id == matched_face.face_id:
-                    print(face.face_id)
-                    print(matched_face.face_id)
                     print('Face Matched!')
-                if (face.face_id != matched_face.face_id):
-                    print('Face not matched!')
+                    default_storage.delete(tmp_file)
+                    return redirect('main:money_transfer')
         
         default_storage.delete(tmp_file)
     return render(request,'main/face_verify.html')
@@ -179,26 +186,18 @@ def face_verify(request):
 def dashboard(request):
     return render(request, 'main/dashboard.html')
 
+def bank_account_details(request):
+    curr_user = UserAccount.objects.get(user_name=request.user) 
+    return render(request, 'main/bank_account_details.html',{"curr_user": curr_user})
 
 
 
-# Base url for the Verify and Facelist/Large Facelist operations
-IMAGE_BASE_URL = 'https://algorithmwatch.org/en/wp-content/uploads/2021/03/Team-Mosaic-New-Faces-March-2021.jpg'
 
 
-face_client = FaceClient(ENDPOINT, CognitiveServicesCredentials(KEY))
 
-import os
-import io
-import json
-from azure.cognitiveservices.vision.face import FaceClient
-from msrest.authentication import CognitiveServicesCredentials
-import requests
-from PIL import Image, ImageDraw, ImageFont
 
-"""
-Example 4. Detect if a face shows up in other photos/images
-"""
+
+
 
 
 
